@@ -1,0 +1,143 @@
+class Drawer {
+
+    /** GRAPHICS DRAWING FUNCTIONS: */
+
+    function void drawBoard() {
+        do Screen.clearScreen();
+
+        // draw the hanging pole:
+        do Screen.drawLine(490, 250, 510, 250);
+        do Screen.drawLine(500, 250, 500, 5);
+        do Screen.drawLine(500, 5, 400, 5);
+        do Screen.drawLine(400, 5, 400, 50);
+
+        // draw the separating line:
+        do Screen.drawLine(345, 0, 345, 255);
+
+        // draw box of used letters:
+        do Screen.drawLine(5, 250, 335, 250);
+        do Screen.drawLine(5, 200, 335, 200);
+        do Screen.drawLine(5, 200, 5, 250);
+        do Screen.drawLine(335, 200, 335, 250);
+        do Output.moveCursor(19, 2);
+        do Output.printString("WRONG LETTERS:");
+
+        return;
+    }
+
+    function void drawHead() {
+        do Screen.drawCircle(400, 64, 14);
+        return;
+    }
+
+    function void drawBody() {
+        do Screen.drawLine(400, 78, 400, 170);
+        return;
+    }
+
+    function void drawRightHand() {
+        do Screen.drawLine(400, 100, 450, 150);
+        return;
+    }
+
+    function void drawLeftHand() {
+        do Screen.drawLine(400, 100, 350, 150);
+        return;
+    }
+
+    function void drawRightLeg() {
+        do Screen.drawLine(400, 170, 430, 215);
+        return;
+    }
+
+    function void drawLeftLeg() {
+        do Screen.drawLine(400, 170, 370, 215);
+        return;
+    }
+
+
+    /** Function that draws one line for each letter in the word the player need to guess. */
+    function void drawLetterLines(int length) {
+        var int i;
+        var int lastX;      // position of the last line so we know when to start the next one
+
+        let i = 0;
+        let lastX = 5;
+        while(i < length) {
+            do Screen.drawLine(lastX, 100, lastX + 24, 100);
+            let lastX = lastX + 33;     // incrementing by 33 so the next line would start after this line's 24 columns + 9 separating columns
+            let i = i + 1;
+        }
+        return;
+    }
+
+    /** Function that writes a specific letter at specific location
+        This function called only after the caller checked that this
+        letter supposed to be written at this location. */
+    function void writeLetter(char letter, int index) {
+        var int pos;
+
+        // setting the correct position for each letter (design considerations)
+        if(index = 1) {let pos = 2;}
+        if(index = 2) {let pos = 6;}
+        if(index = 3) {let pos = 10;}
+        if(index = 4) {let pos = 14;}
+        if(index = 5) {let pos = 18;}
+        if(index = 6) {let pos = 22;}
+        if(index = 7) {let pos = 26;}
+        if(index = 8) {let pos = 31;}
+        if(index = 9) {let pos = 35;}
+        if(index = 10) {let pos = 39;}
+
+        // move to the correct position and write the letter
+        do Output.moveCursor(8, pos);
+        do Output.printChar(letter);
+
+        return;
+    }
+
+    /** Function that writes a wrong letter in the wrong letters box.
+        This function called only after the caller checked that this letter
+        is a new wrong letter that needs to be written. */
+    function void addWrongLetter(Char letter, int wrongLetters) {
+        var int pos;
+        let pos = 5 * (wrongLetters + 1);
+
+        do Output.moveCursor(21, pos);
+        do Output.printChar(letter);
+
+        if(wrongLetters = 0) {do Drawer.drawHead();}
+        if(wrongLetters = 1) {do Drawer.drawBody();}
+        if(wrongLetters = 2) {do Drawer.drawRightHand();}
+        if(wrongLetters = 3) {do Drawer.drawLeftHand();}
+        if(wrongLetters = 4) {do Drawer.drawRightLeg();}
+        if(wrongLetters = 5) {do Drawer.drawLeftLeg();}
+
+        return;
+    }
+
+
+    /** Functions for end-game situations: */
+    function void gameOver(String word) {
+        do Sys.wait(1000);
+        do Screen.clearScreen();
+        do Output.moveCursor(11, 27);
+        do Output.printString("GAME OVER!!!");
+        do Output.moveCursor(14, 17);
+        do Output.printString("The correct word was: ");
+        do Output.printString(word);
+        return;
+    }
+
+    function void gameWon(String word) {
+        do Sys.wait(1000);
+        do Screen.clearScreen();
+        do Output.moveCursor(11, 27);
+        do Output.printString("YOU WON!!!");
+        do Output.moveCursor(14, 17);
+        do Output.printString("You guessed the word: ");
+        do Output.printString(word);
+        return;
+    }
+
+}

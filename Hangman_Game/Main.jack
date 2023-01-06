@@ -1,0 +1,17 @@
+class Main {
+
+    function void main() {
+        var Game game;
+        var int seed;
+
+        do Output.moveCursor(11, 25);
+
+        // get a random seed from the user to start the Random-Number-Generator:
+        let seed = Keyboard.readInt("Enter a number: ");
+        
+        let game = Game.new(seed);
+        do game.runGame();
+        return;
+    }
+
+}

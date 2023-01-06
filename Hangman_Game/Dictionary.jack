@@ -1,0 +1,66 @@
+class Dictionary {
+    field Array dict;
+    field int len;
+    static Random rnd;
+
+    /** Initializing the dictionary as an array of strings.
+        Also initializes the Random-Number-Generator. */
+    constructor Dictionary new(int seed) {
+        let len = 40;
+        let rnd = Random.new(seed);
+        let dict = Array.new(len);
+        let dict[0] = "CLIMATE";
+        let dict[1] = "BEDROOM";
+        let dict[2] = "NATURE";
+        let dict[3] = "NATION";
+        let dict[4] = "VERSION";
+        let dict[5] = "MUSIC";
+        let dict[6] = "PROMOTION";
+        let dict[7] = "PSYCHOLOGY";
+        let dict[8] = "SHIRT";
+        let dict[9] = "HOUSE";
+        let dict[10] = "GREEN";
+        let dict[11] = "RIVER";
+        let dict[12] = "SKILLS";
+        let dict[13] = "LANGUAGE";
+        let dict[14] = "CAMERA";
+        let dict[15] = "POLICE";
+        let dict[16] = "FOREST";
+        let dict[17] = "STUDENT";
+        let dict[18] = "COMPUTER";
+        let dict[19] = "BONUS";
+        let dict[20] = "HIGHWAY";
+        let dict[21] = "STORY";
+        let dict[22] = "MATH";
+        let dict[23] = "REPUBLIC";
+        let dict[24] = "DIRECTION";
+        let dict[25] = "ATTITUDE";
+        let dict[26] = "ACCIDENT";
+        let dict[27] = "MOMENT";
+        let dict[28] = "FEEDBACK";
+        let dict[29] = "QUALITY";
+        let dict[30] = "INSURANCE";
+        let dict[31] = "INTERNET";
+        let dict[32] = "AMBITION";
+        let dict[33] = "PRESIDENT";
+        let dict[34] = "COUNTRY";
+        let dict[35] = "OUTCOME";
+        let dict[36] = "FREEDOM";
+        let dict[37] = "HISTORY";
+        let dict[38] = "BIRTHDAY";
+        let dict[39] = "SOLUTION";
+        return this;
+    }
+
+    /** Returns a random word out of the dictionary array.
+        The random index is based on the Random-Number-Generator. */
+    method String getRandomWord() {
+        var int randomIndex;
+        var String word;
+
+        let randomIndex = rnd.randRange(len);
+        let word = dict[randomIndex];
+
+        return word;
+    }
+}

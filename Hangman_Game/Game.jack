@@ -1,0 +1,104 @@
+class Game {
+    field Dictionary dict;
+    static String wrongLetters;     // keeps track of the wrong letters the was guessed
+    static String goodLetters;      // keeps track of the good letters that was guessed
+    static int goodLettersCounter;  // counts how many non-unique good letters was written
+
+    /** Initializes the static variables and the dictionary. */
+    constructor Game new(int seed) {
+        let dict = Dictionary.new(seed);
+        let wrongLetters = String.new(6);
+        let goodLetters = String.new(10);
+        let goodLettersCounter = 0;
+        return this;
+    }
+
+    /** Returns 1 if the String str contains the char c.
+        Otherwise - returns 0. */
+    function int contains(String str, char c) {
+        var int i;
+        let i = 0;
+
+        while (i < str.length()) {
+            if(str.charAt(i) = c) {
+                return 1;
+            }
+            let i = i + 1;
+        }
+        return 0;
+    }
+
+    /** Checks if the letter is in the word that the player needs to guess.
+        If yes - writes it at the correct spot.
+        If no - writes it at the wrong letters box. */
+    function void guess(char letter, String word) {
+        var int i, counter;
+        let i = 0;
+        let counter = 0;
+
+        // the writing is done only if this letter wasn't a previous guess.
+        if((Game.contains(goodLetters, letter) = 0) & (Game.contains(wrongLetters, letter) = 0)) {
+            while(i < word.length()) {
+                // checking for a match for every possible letter in the word:
+                if(word.charAt(i) = letter) {
+                    let goodLettersCounter = goodLettersCounter + 1;
+                    do Drawer.writeLetter(letter, i + 1);
+                    if(Game.contains(goodLetters, letter) = 0) {
+                        let goodLetters =  goodLetters.appendChar(letter);
+                    }
+                    let counter = counter + 1;
+                }
+                let i = i + 1;
+            }
+            if(counter = 0) {   // the letter is not in the word
+                do Drawer.addWrongLetter(letter, wrongLetters.length());
+                let wrongLetters = wrongLetters.appendChar(letter);
+            }
+        }
+        return;
+    }
+
+    /** This is the main loop of the game.
+        This loop would read guesses from the user as long as the game still alive. */
+    method void runGame() {
+        // local utilities:
+        var int wordLength;
+        var String currentWord;
+        var char currentLetter;
+
+        let currentWord = dict.getRandomWord();
+        let wordLength = currentWord.length();
+
+        // resetes the board, drawing enough lines for the current word:
+        do Drawer.drawBoard();
+        do Drawer.drawLetterLines(wordLength);
+
+        // main loop - runs while the game didn't end:
+        while((wrongLetters.length() < 6) & (goodLettersCounter < wordLength)) {
+            do Output.moveCursor(22, 63);   // so the cursour won't interupt the player
+            let currentLetter = Keyboard.readChar();
+            do Output.backSpace();          // read a letter and immediately erases it from the screen
+
+            // ignoring non letters characters and converting lower case to upper case:
+            if((currentLetter > 64) & (currentLetter < 91)) {
+                do Game.guess(currentLetter, currentWord);
+            }
+            else {
+                if((currentLetter > 96)  & (currentLetter < 123)){
+                    do Game.guess(currentLetter - 32, currentWord);
+                }
+            }
+        }
+
+        // main loop ended - checking if its a win or a lose:
+        if(wrongLetters.length() = 6) {
+            do Drawer.gameOver(currentWord);
+        }
+        else {
+            do Drawer.gameWon(currentWord);
+        }
+
+        return;
+    }
+
+}
